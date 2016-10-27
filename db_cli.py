@@ -42,7 +42,7 @@ def generate_csv():
 
 
 @cli.command()
-def init_db():
+def prepare_db():
     click.echo('InitDB is executing')
 
 
