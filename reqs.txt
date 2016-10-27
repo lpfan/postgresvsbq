@@ -2,3 +2,4 @@ click
 ipdb
 sqlalchemy
 psycopg2
+faker
