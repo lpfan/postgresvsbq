@@ -79,6 +79,20 @@ def generate_csv():
 
 @cli.command()
 @click.argument('db')
+@click.option('--desired-record-count', type=click.INT, default=10000, help='')
+def test_single_insert_new_connect_every_time(db, desired_record_count):
+    pass
+
+
+@cli.command()
+@click.argument('db')
+@click.option('--desired-record-count', type=click.INT, default=10000, help='')
+def test_single_insert_permanent_connection(db, desired_record_count):
+    pass
+
+
+@cli.command()
+@click.argument('db')
 @click.option('--tables-count', type=click.INT, help='Specify how many tables you want to have in DB.')
 @click.option('--table-width', type=click.INT, help='Specify how many columns every table should has.')
 def prepare_db(db, tables_count, table_width ):
@@ -88,8 +102,7 @@ def prepare_db(db, tables_count, table_width ):
     for table_index in range(tables_count):
         _create_generic_table('table_{}'.format(table_index), table_width, metadata=metadata)
 
-    engine = create_engine('postgresql://test:test@localhost:9887/test')
-    import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
+    engine = create_engine('postgresql://test:test@localhost:9887/{}'.format(db))
     metadata.create_all(engine)
 
 
