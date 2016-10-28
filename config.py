@@ -4,6 +4,6 @@ DB = {
         'PORT': '9887',
         'PASSWORD': 'test',
         'USER': 'test',
-        'DB': 'blackbase'
+        'DB': 'test'
     }
 }

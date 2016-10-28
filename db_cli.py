@@ -79,9 +79,29 @@ def generate_csv():
 
 @cli.command()
 @click.argument('db')
-@click.option('--desired-record-count', type=click.INT, default=10000, help='')
-def test_single_insert_new_connect_every_time(db, desired_record_count):
-    pass
+@click.option('--desired-record-per-table-count', type=click.INT, default=10000, help='Set count of rows for every table')
+def test_single_insert_new_connect_every_time(db, desired_record_per_table_count):
+    inserted_rows = 0
+
+    '''
+    table list should be defined somewhere else, outside this function
+    '''
+    conn = _init_db_connection()
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_type='BASE TABLE'")
+        tables = cursor.fetchall()
+    conn.close()
+
+    for t in tables:
+        while inserted_rows <= desired_record_per_table_count:
+            conn = _init_db_connection()
+
+
+            with conn.cursor() as cursor:
+                pass
+
+            conn.close()
+            inserted_rows += 1
 
 
 @cli.command()
