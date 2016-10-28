@@ -1,9 +1,9 @@
 DB = {
     'POSTGRES_STORE': {
-        'HOST': 'TBD',
-        'PORT': 'TBD',
-        'PASSWORD': 'TBD',
-        'USER': 'TBD',
-        'DB': 'TBD'
+        'HOST': 'localhost',
+        'PORT': '9887',
+        'PASSWORD': 'test',
+        'USER': 'test',
+        'DB': 'blackbase'
     }
 }

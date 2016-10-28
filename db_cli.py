@@ -1,15 +1,15 @@
 #!/usr/bin/env python
+import random
+
 import click
 import psycopg2
 
 from faker import Factory
+from sqlalchemy import types as sql_types
 from sqlalchemy import (
     Table,
     MetaData,
     Column,
-    Integer,
-    String,
-    ForeignKey,
     create_engine
 )
 
@@ -30,11 +30,30 @@ def _init_db_connection_pool():
 
 
 def _create_generic_table(table_name, column_count, metadata=None):
+    possible_column_type = [
+        sql_types.Boolean,
+        sql_types.Date,
+        sql_types.DateTime,
+        sql_types.Float,
+        sql_types.Integer,
+        sql_types.Numeric,
+        sql_types.String,
+        sql_types.Text
+    ]
+
+
     if metadata is None:
         metadata = MetaData()
     columnset = [
-        Column('id', Integer, primary_key=True)
+        Column('id', sql_types.Integer, primary_key=True)
     ]
+
+    for cc in range(column_count):
+        column_type = random.choice(possible_column_type)
+        columnset.append(
+            Column('column_{}'.format(cc), column_type, nullable=True)
+        )
+
     Table(table_name, metadata, *columnset)
 
 
@@ -59,7 +78,7 @@ def generate_csv():
 
 
 @cli.command()
-@click.argument('db', help='Set the DB you are going to work with.')
+@click.argument('db')
 @click.option('--tables-count', type=click.INT, help='Specify how many tables you want to have in DB.')
 @click.option('--table-width', type=click.INT, help='Specify how many columns every table should has.')
 def prepare_db(db, tables_count, table_width ):
@@ -67,9 +86,10 @@ def prepare_db(db, tables_count, table_width ):
     metadata = MetaData()
 
     for table_index in range(tables_count):
-        _create_generic_table('some_name', table_width, metadata=metadata)
+        _create_generic_table('table_{}'.format(table_index), table_width, metadata=metadata)
 
-    engine = create_engine("postgresql://scott:tiger@localhost/test")
+    engine = create_engine('postgresql://test:test@localhost:9887/test')
+    import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
     metadata.create_all(engine)
 
 
